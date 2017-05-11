@@ -1,8 +1,6 @@
 require 'gosu'
 
 class Ship
-  ACCELERATION = 9.81
-
   def initialize
     @sprite = Gosu::Image.new('images/ship.png').subimage(0,0,32,32)
     @position = { x: 375, y: 667, angle: 0.0 }

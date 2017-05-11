@@ -1,11 +1,13 @@
 require 'gosu'
 require './ship.rb'
+require './bullet.rb'
 
 class GameWindow < Gosu::Window
   def initialize(*args)
     super
     @ship = Ship.new
     @background = Gosu::Image.new('images/background.png', {tileable: true})
+    @bullet = Bullet.new
   end
 
   def button_down(button)
@@ -15,6 +17,7 @@ class GameWindow < Gosu::Window
   def draw
     @background.draw(0, 0, 0)
     @ship.draw
+    @bullet.draw
   end
 
   def update
@@ -27,6 +30,7 @@ class GameWindow < Gosu::Window
     if Gosu.button_down? Gosu::KB_UP
       @ship.accelerate
     end
+    @bullet.move
     @ship.move
   end
 end
