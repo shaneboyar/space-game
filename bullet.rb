@@ -2,7 +2,11 @@ require 'gosu'
 
 class Bullet
   def initialize(position)
-    @position = position.dup
+    @position = {
+      x: position[:x] + Gosu::offset_x(position[:angle], 15),
+      y: position[:y] + Gosu::offset_y(position[:angle], 15),
+      angle: position[:angle],
+    }
     @sprite = Gosu::Image.new('images/laser.png').subimage(0,0,12,32)
     @velocity = { x: 1, y: 1 }
   end
