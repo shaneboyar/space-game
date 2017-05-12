@@ -27,7 +27,8 @@ class GameWindow < Gosu::Window
 
     @ship.accelerate if Gosu.button_down? Gosu::KB_UP
 
-    @bullets << @ship.fire if Gosu.button_down? Gosu::KB_SPACE
+    bullet = @ship.fire if Gosu.button_down? Gosu::KB_SPACE
+    @bullets << bullet if bullet
 
     if @bullets.any?
       @bullets.each do |bullet|
@@ -35,7 +36,9 @@ class GameWindow < Gosu::Window
         bullet.move
       end
     end
+
     @ship.move
+    @ship.recover_ammo
   end
 end
 

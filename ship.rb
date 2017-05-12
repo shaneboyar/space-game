@@ -6,6 +6,7 @@ class Ship
     @position = { x: 375, y: 667, angle: 0.0 }
     @velocity = { x: 0, y: 0 }
     @score = 0
+    @ammo = 100
   end
 
   def turn_left
@@ -33,7 +34,13 @@ class Ship
   end
 
   def fire
-    bullet = Bullet.new(@position)
+    @ammo = @ammo > 0 ? @ammo -= 1 : 0
+    puts "****#{@ammo}****"
+    bullet = Bullet.new(@position) if (@ammo > 0)
+  end
+
+  def recover_ammo
+    @ammo = @ammo < 100 ? (@ammo += 0.5).round(1) : 100
   end
 
   def draw
