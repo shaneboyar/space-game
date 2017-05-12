@@ -12,10 +12,6 @@ class GameWindow < Gosu::Window
 
   def button_down(button)
     close if button == Gosu::KB_ESCAPE
-    if button == Gosu::KB_SPACE
-      @bullets << @ship.fire
-      puts "***#{@bullets}****"
-    end
   end
 
   def draw
@@ -25,15 +21,14 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    if Gosu.button_down? Gosu::KB_LEFT
-      @ship.turn_left
-    end
-    if Gosu.button_down? Gosu::KB_RIGHT
-      @ship.turn_right
-    end
-    if Gosu.button_down? Gosu::KB_UP
-      @ship.accelerate
-    end
+    @ship.turn_left if Gosu.button_down? Gosu::KB_LEFT
+
+    @ship.turn_right if Gosu.button_down? Gosu::KB_RIGHT
+
+    @ship.accelerate if Gosu.button_down? Gosu::KB_UP
+
+    @bullets << @ship.fire if Gosu.button_down? Gosu::KB_SPACE
+
     if @bullets.any?
       @bullets.each do |bullet|
         @bullets.delete_if {|bullet| bullet.out_of_frame?}
