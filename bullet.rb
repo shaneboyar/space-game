@@ -1,6 +1,8 @@
 require 'gosu'
 
 class Bullet
+  attr_reader :position
+
   def initialize(position)
     @position = {
       x: position[:x] + Gosu::offset_x(position[:angle], 15),
@@ -9,6 +11,7 @@ class Bullet
     }
     @sprite = Gosu::Image.new('images/laser.png').subimage(0,0,12,32)
     @velocity = { x: 1, y: 1 }
+    @health = 100
   end
 
   def move
@@ -18,6 +21,10 @@ class Bullet
 
   def draw
     @sprite.draw_rot(@position[:x], @position[:y], 1, @position[:angle])
+  end
+
+  def collide_with_game_object?(game_object_array)
+    game_object_array.any? { |game_object| Gosu.distance(@position[:x], @position[:y], game_object.position[:x], game_object.position[:y]) < 10 }
   end
 
   def out_of_frame?
