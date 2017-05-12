@@ -32,6 +32,10 @@ class Ship
     @velocity[:y] *= 0.95
   end
 
+  def fire
+    bullet = Bullet.new(@position)
+  end
+
   def draw
     @sprite.draw_rot(@position[:x], @position[:y], 1, @position[:angle])
   end

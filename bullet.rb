@@ -1,16 +1,11 @@
 require 'gosu'
 
-class Bullet < Ship
-  def initialize
-    super
+class Bullet
+  def initialize(position)
+    @position = position.dup
     @sprite = Gosu::Image.new('images/laser.png').subimage(0,0,12,32)
     @velocity = { x: 1, y: 1 }
   end
-
-  # def accelerate
-  #   @velocity[:x] += Gosu.offset_x(@position[:angle], 0.5)
-  #   @velocity[:y] += Gosu.offset_y(@position[:angle], 0.5)
-  # end
 
   def move
     @position[:x] += Gosu.offset_x(@position[:angle], @velocity[:x] *= 1.05)
@@ -19,5 +14,9 @@ class Bullet < Ship
 
   def draw
     @sprite.draw_rot(@position[:x], @position[:y], 1, @position[:angle])
+  end
+
+  def out_of_frame?
+    !@position[:x].between?(0,750) or !@position[:y].between?(0,1334)
   end
 end

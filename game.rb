@@ -7,17 +7,21 @@ class GameWindow < Gosu::Window
     super
     @ship = Ship.new
     @background = Gosu::Image.new('images/background.png', {tileable: true})
-    @bullet = Bullet.new
+    @bullets =[]
   end
 
   def button_down(button)
     close if button == Gosu::KB_ESCAPE
+    if button == Gosu::KB_SPACE
+      @bullets << @ship.fire
+      puts "***#{@bullets}****"
+    end
   end
 
   def draw
     @background.draw(0, 0, 0)
     @ship.draw
-    @bullet.draw
+    @bullets.each {|bullet| bullet.draw}
   end
 
   def update
@@ -30,7 +34,12 @@ class GameWindow < Gosu::Window
     if Gosu.button_down? Gosu::KB_UP
       @ship.accelerate
     end
-    @bullet.move
+    if @bullets.any?
+      @bullets.each do |bullet|
+        @bullets.delete_if {|bullet| bullet.out_of_frame?}
+        bullet.move
+      end
+    end
     @ship.move
   end
 end
