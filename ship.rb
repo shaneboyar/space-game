@@ -46,7 +46,7 @@ class Ship
   end
 
   def collide_with_game_object?(game_object_array)
-    @health -= 10 if game_object_array.any? { |game_object| Gosu.distance(@position[:x], @position[:y], game_object.position[:x], game_object.position[:y]) < 1 }
+    @health -= 10 if game_object_array.any? { |game_object| Gosu.distance(@position[:x], @position[:y], game_object.position[:x], game_object.position[:y]) < 32 }
   end
 
   def draw
