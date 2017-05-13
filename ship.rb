@@ -30,7 +30,7 @@ class Ship
     @position[:y] += @velocity[:y]
 
     @position[:x] %= 750
-    @position[:y] %= 1334
+    @position[:y] %= 1200
 
     @velocity[:x] *= 0.97
     @velocity[:y] *= 0.97
@@ -46,7 +46,7 @@ class Ship
   end
 
   def collide_with_game_object?(game_object_array)
-    @health -= 10 if game_object_array.any? { |game_object| Gosu.distance(@position[:x], @position[:y], game_object.position[:x], game_object.position[:y]) < 32 }
+    @health -= 10 if game_object_array.any? { |game_object| Gosu.distance(@position[:x], @position[:y], game_object.position[:x], game_object.position[:y]) < 32 if game_object}
   end
 
   def draw

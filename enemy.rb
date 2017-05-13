@@ -6,7 +6,7 @@ class Enemy
 
   def initialize
     @sprite = Gosu::Image.new('images/enemy.png').subimage(0,0,32,32)
-    @position = { x: rand(0..750), y: rand(0..1334), angle: rand(0..360) }
+    @position = { x: rand(0..750), y: rand(0..1200), angle: rand(0..360) }
     @velocity = { x: 1, y: 1 }
     @score = 0
     @health = 1
@@ -36,7 +36,7 @@ class Enemy
     @position[:y] += Gosu.offset_y(@position[:angle], @velocity[:y] *= 1)
 
     @position[:x] %= 750
-    @position[:y] %= 1334
+    @position[:y] %= 1200
 
     @velocity[:x] *= 1.0005
     @velocity[:y] *= 1.0005
@@ -56,7 +56,7 @@ class Enemy
   end
 
   def collide_with_game_object?(game_object_array)
-    @health -= 1 if game_object_array.any? { |game_object| Gosu.distance(@position[:x], @position[:y], game_object.position[:x], game_object.position[:y]) < 20 }
+    @health -= 1 if game_object_array.any? { |game_object| Gosu.distance(@position[:x], @position[:y], game_object.position[:x], game_object.position[:y]) < 20 if game_object}
   end
 
   def draw

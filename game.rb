@@ -20,21 +20,22 @@ class GameWindow < Gosu::Window
 
   def button_down(button)
     close if button == Gosu::KB_ESCAPE
-    reset if button == Gosu::KB_SPACE and @game_over
+    reset if button == Gosu::KB_RETURN and @game_over
   end
 
   def draw
-    @background.draw(0, 0, 0)
-    Gosu::Font.new(50, {name: 'Menlo'}).draw("#{@score}", 20, 1, 1)
+    @background.draw(0, -125, 0)
+    @score_message = Gosu::Font.new(50, {name: 'Menlo'})
+    @score_message.draw("#{@score}", 20, 1, 1) if !@game_over
     @game_objects.each do |k, game_object_array|
       game_object_array.each { |game_object|  game_object.draw if game_object }
     end
 
     Gosu.draw_rect(50, 1250, (@ship.health * 3), 50, Gosu::Color::GREEN, 3)
-    Gosu.draw_rect(50, 1250, 300, 50, Gosu::Color::BLACK, 2)
+    Gosu.draw_rect(50, 1250, 300, 50, Gosu::Color::WHITE, 2)
 
     Gosu.draw_rect(425, 1250, (@ship.ammo * 3), 50, Gosu::Color::RED, 3)
-    Gosu.draw_rect(425, 1250, 300, 50, Gosu::Color::BLACK, 2)
+    Gosu.draw_rect(425, 1250, 300, 50, Gosu::Color::WHITE, 2)
 
     if @game_over
       @game_objects.each { |k, v| @game_objects.delete(k) }
@@ -43,7 +44,7 @@ class GameWindow < Gosu::Window
       @final_score_message = Gosu::Font.new(100)
       @final_score_message.draw("Score: #{@score}", 150, 600, 1)
       @reset_message = Gosu::Font.new(50)
-      @reset_message.draw("Press [Space] to play again", 75, 700, 1)
+      @reset_message.draw("Press [Return] to play again", 75, 700, 1)
     end
   end
 
@@ -73,11 +74,11 @@ class GameWindow < Gosu::Window
 
       if @game_objects[:bullets].any?
         @game_objects[:bullets].each do |bullet|
-          @game_objects[:bullets].delete_if {|bullet| bullet.out_of_frame? ||
+          @game_objects[:bullets].delete_if {|bullet| (bullet.out_of_frame? ||
                                                       bullet.collide_with_game_object?(@game_objects[:ships]) ||
-                                                      bullet.collide_with_game_object?(@game_objects[:enemies])
+                                                      bullet.collide_with_game_object?(@game_objects[:enemies])) if bullet
           }
-          bullet.move
+          bullet.move if bullet
         end
       end
 
