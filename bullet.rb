@@ -1,5 +1,3 @@
-require 'gosu'
-
 class Bullet
   attr_reader :position
 

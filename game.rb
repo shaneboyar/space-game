@@ -1,16 +1,22 @@
 require 'gosu'
 require './ship.rb'
 require './bullet.rb'
+require './enemy.rb'
 
 class GameWindow < Gosu::Window
   def initialize(*args)
     super
     @background = Gosu::Image.new('images/background.png', {tileable: true})
-    @game_objects = {ships: Array.new, bullets: Array.new}
+    @game_objects = {
+      ships: Array.new,
+      bullets: Array.new,
+      enemies: Array.new
+    }
     @game_objects[:ships] << @ship = Ship.new
     @bullets = Array.new
     @game_over_message = Gosu::Font.new(100)
     @game_over = false
+    @timer = 0
   end
 
   def button_down(button)
@@ -46,10 +52,26 @@ class GameWindow < Gosu::Window
 
       bullet = @ship.fire if Gosu.button_down? Gosu::KB_SPACE
       @game_objects[:bullets] << bullet if bullet
+      @timer += (0.1)
+      @game_objects[:enemies] << Enemy.new if Enemy.spawn_new?(@timer.round(2))
+
+      if @game_objects[:enemies].any?
+        @game_objects[:enemies].each do |enemy|
+          @game_objects[:enemies].delete_if {|enemy| enemy.dead }
+          enemy.collide_with_game_object?(@game_objects[:bullets])
+          enemy.collide_with_game_object?(@game_objects[:ships])
+          enemy.aim(@ship)
+          enemy.move
+          enemy.die
+        end
+      end
 
       if @game_objects[:bullets].any?
         @game_objects[:bullets].each do |bullet|
-          @game_objects[:bullets].delete_if {|bullet| bullet.out_of_frame? || bullet.collide_with_game_object?(@game_objects[:ships])}
+          @game_objects[:bullets].delete_if {|bullet| bullet.out_of_frame? ||
+                                                      bullet.collide_with_game_object?(@game_objects[:ships]) ||
+                                                      bullet.collide_with_game_object?(@game_objects[:enemies])
+          }
           bullet.move
         end
       end
@@ -57,6 +79,7 @@ class GameWindow < Gosu::Window
       @ship.move
       @ship.recover_ammo
       @ship.collide_with_game_object?(@game_objects[:bullets])
+      @ship.collide_with_game_object?(@game_objects[:enemies])
       @game_over = true if @ship.health.zero?
     end
   end

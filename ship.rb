@@ -1,5 +1,3 @@
-require 'gosu'
-
 class Ship
   attr_reader :ammo
   attr_reader :health
