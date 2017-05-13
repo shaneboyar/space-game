@@ -3,8 +3,8 @@ class Bullet
 
   def initialize(position)
     @position = {
-      x: position[:x] + Gosu::offset_x(position[:angle], 15),
-      y: position[:y] + Gosu::offset_y(position[:angle], 15),
+      x: position[:x] + Gosu::offset_x(position[:angle], 25),
+      y: position[:y] + Gosu::offset_y(position[:angle], 25),
       angle: position[:angle],
     }
     @sprite = Gosu::Image.new('images/laser.png').subimage(0,0,12,32)
@@ -22,7 +22,7 @@ class Bullet
   end
 
   def collide_with_game_object?(game_object_array)
-    game_object_array.any? { |game_object| Gosu.distance(@position[:x], @position[:y], game_object.position[:x], game_object.position[:y]) < 10 }
+    game_object_array.any? { |game_object| Gosu.distance(@position[:x], @position[:y], game_object.position[:x], game_object.position[:y]) < 15 }
   end
 
   def out_of_frame?
