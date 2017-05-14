@@ -76,12 +76,13 @@ class GameWindow < Gosu::Window
         end
       end
 
+      @game_objects[:bullets].compact! if @game_objects[:bullets].any? # But why???
       if @game_objects[:bullets].any?
-        @game_objects[:bullets].each do |bullet|
-          @game_objects[:bullets].delete_if {|bullet| (bullet.out_of_frame? ||
+        @game_objects[:bullets].delete_if {|bullet| (bullet.out_of_frame? ||
                                                       bullet.collide_with_game_object?(@game_objects[:ships]) ||
                                                       bullet.collide_with_game_object?(@game_objects[:enemies])) if bullet
-          }
+        }
+        @game_objects[:bullets].each do |bullet|
           bullet.move if bullet
         end
       end

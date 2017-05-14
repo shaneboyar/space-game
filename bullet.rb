@@ -26,6 +26,6 @@ class Bullet
   end
 
   def out_of_frame?
-    !@position[:x].between?(0,750) or !@position[:y].between?(0,1334)
+    !@position[:x].between?(0,750) or !@position[:y].between?(0,1205)
   end
 end
